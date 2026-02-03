@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" style="max-width: 600px;">
+    <div class="card shadow-lg mt-5 p-4">
+        <div class="card-body">
+            <h2 class="text-center mb-4 fw-bold">Visitor Check-In</h2>
+
+            <form method="POST" action="/add" novalidate>
+
+                <!-- Name -->
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Full Name</label>
+                    <input type="text" class="form-control form-control-lg" 
+                           id="name" name="name" required autofocus placeholder="Enter your full name">
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-3">
+                    <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                    <input type="tel" class="form-control form-control-lg" 
+                           id="phone" name="phone" required placeholder="e.g. 07XXXXXXXX">
+                </div>
+
+                <!-- Purpose -->
+                <div class="mb-3">
+                    <label for="purpose" class="form-label fw-semibold">Purpose of Visit</label>
+                    <select class="form-select form-select-lg" id="purpose" name="purpose" required
+                            onchange="toggleOtherField()">
+                        <option value="" disabled selected>-- Select Purpose --</option>
+                        <option value="Meeting">Meeting</option>
+                        <option value="Delivery">Delivery / Pickup</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Maintenance">Maintenance / Service</option>
+                        <option value="Other">Other (please specify)</option>
+                    </select>
+                </div>
+
+                <!-- Other purpose (hidden by default) -->
+                <div class="mb-4" id="other-container" style="display: none;">
+                    <label for="other_purpose" class="form-label fw-semibold">Please specify</label>
+                    <input type="text" class="form-control form-control-lg" 
+                           id="other_purpose" name="other_purpose" placeholder="Describe your purpose">
+                </div>
+
+                <!-- Submit button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                        Check In → I'm Here
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <small class="text-muted">
+            <a href="/" class="text-decoration-none">← Back to main screen</a>
+        </small>
+    </div>
+</div>
+
+<!-- JavaScript to show/hide "Other" field -->
+<script>
+function toggleOtherField() {
+    const purpose = document.getElementById('purpose').value;
+    const container = document.getElementById('other-container');
+    
+    if (purpose === 'Other') {
+        container.style.display = 'block';
+        document.getElementById('other_purpose').required = true;
+    } else {
+        container.style.display = 'none';
+        document.getElementById('other_purpose').required = false;
+    }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card p-5 shadow text-center mt-5">
+    <h2 class="mb-4">Thank You, {{ name }}!</h2>
+    <p class="lead">You have successfully checked in at {{ checkin_time }}</p>
+    
+    <hr class="my-4">
+    
+    <h4>When you leave the premises:</h4>
+    <p>Please click the button below to check out.</p>
+    
+    <form method="POST" action="{{ url_for('self_checkout', visitor_id=visitor_id) }}">
+        <button type="submit" class="btn btn-lg btn-primary px-5 py-3">
+            I'm Leaving – Check Out Now
+        </button>
+    </form>
+    
+    <p class="text-muted mt-4 small">
+        This page is private to you. Please don't share the link.
+    </p>
+    
+    <a href="/" class="btn btn-outline-secondary mt-3">Back to Home</a>
+</div>
+
+{% endblock %}

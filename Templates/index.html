@@ -1,0 +1,551 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    /* Clean, professional styles */
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        color: #1e293b;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    }
+    
+    /* Navbar - Clean and professional */
+    .navbar-custom {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 1rem 2rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .navbar-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+    
+    /* Left side - Logo */
+    .navbar-left {
+        flex: 0 0 auto;
+    }
+    
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        text-decoration: none;
+    }
+    
+    .navbar-logo {
+        height: 40px;
+        width: auto;
+        border-radius: 8px;
+    }
+    
+    /* Center - Time & Date */
+    .navbar-center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.2rem;
+        min-width: 0;
+        text-align: center;
+    }
+    
+    .time-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .navbar-time {
+        font-family: 'Courier New', monospace;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #4f46e5;
+        white-space: nowrap;
+    }
+    
+    .navbar-date {
+        font-size: 0.9rem;
+        color: #64748b;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    
+    .date-separator {
+        color: #94a3b8;
+        margin: 0 0.5rem;
+    }
+    
+    .navbar-message {
+        font-size: 0.85rem;
+        color: #64748b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        font-style: italic;
+        margin-top: 0.1rem;
+    }
+    
+    /* Right side - Company Name */
+    .navbar-right {
+        flex: 0 0 auto;
+        min-width: 120px;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .company-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #4f46e5;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+    
+    /* Main content */
+    .main-content {
+        padding-top: 80px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 80px);
+        box-sizing: border-box;
+    }
+    
+    .main-container {
+        width: 100%;
+        max-width: 1000px;
+        padding: 30px 20px;
+        box-sizing: border-box;
+    }
+    
+    /* Clean card design */
+    .card-container {
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 20px;
+        padding: 3rem 2.5rem;
+        width: 100%;
+        margin: 0 auto;
+        box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.08),
+            0 5px 20px rgba(0, 0, 0, 0.03);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Subtle gradient background */
+    .card-container::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(79, 70, 229, 0.03) 0%, transparent 70%);
+        z-index: -1;
+    }
+    
+    /* Title Section - Clean and professional */
+    .title-section {
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 25%;
+        width: 50%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #4f46e5, transparent);
+        border-radius: 3px;
+    }
+    
+    .page-subtitle {
+        color: #64748b;
+        font-size: 1.2rem;
+        letter-spacing: 0.3px;
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    /* Clean buttons grid */
+    .buttons-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .action-button {
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #1e293b;
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        font-weight: 600;
+        font-size: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .action-button:hover {
+        transform: translateY(-4px);
+        box-shadow: 
+            0 12px 30px rgba(0, 0, 0, 0.1),
+            0 4px 15px rgba(0, 0, 0, 0.05);
+        border-color: rgba(79, 70, 229, 0.3);
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        text-decoration: none;
+    }
+    
+    .btn-icon {
+        font-size: 2.8rem;
+        margin-bottom: 1.2rem;
+        display: block;
+        opacity: 0.9;
+    }
+    
+    .btn-checkin .btn-icon {
+        color: #10b981; /* Green for check-in */
+    }
+    
+    .btn-checkout .btn-icon {
+        color: #f59e0b; /* Amber for check-out */
+    }
+    
+    .btn-subtext {
+        font-size: 0.95rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        font-weight: 400;
+        line-height: 1.4;
+    }
+    
+    /* Footer/admin section */
+    .footer-section {
+        text-align: center;
+        padding-top: 2.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    
+    .admin-portal {
+        background: rgba(79, 70, 229, 0.08);
+        border: 1px solid rgba(79, 70, 229, 0.2);
+        border-radius: 10px;
+        padding: 0.7rem 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        color: #4f46e5;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+    
+    .admin-portal:hover {
+        background: rgba(79, 70, 229, 0.12);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.1);
+        color: #4f46e5;
+        text-decoration: none;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 1100px) {
+        .card-container {
+            max-width: 95%;
+        }
+        
+        .page-title {
+            font-size: 2.2rem;
+        }
+        
+        .time-container {
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .buttons-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .card-container {
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+        }
+        
+        .navbar-container {
+            padding: 0 1.5rem;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .action-button {
+            padding: 2rem 1.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .btn-icon {
+            font-size: 2.2rem;
+        }
+        
+        .navbar-time {
+            font-size: 1rem;
+        }
+        
+        .navbar-date {
+            font-size: 0.8rem;
+        }
+        
+        .navbar-message {
+            font-size: 0.75rem;
+        }
+        
+        .company-name {
+            font-size: 1.1rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .card-container {
+            padding: 2rem 1.5rem;
+            border-radius: 14px;
+        }
+        
+        .page-title {
+            font-size: 1.6rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1rem;
+        }
+        
+        .action-button {
+            padding: 1.8rem 1.2rem;
+            font-size: 1.2rem;
+            border-radius: 14px;
+        }
+        
+        .btn-icon {
+            font-size: 2rem;
+        }
+        
+        .navbar-custom {
+            padding: 0.8rem 1rem;
+        }
+        
+        .navbar-time {
+            font-size: 0.9rem;
+        }
+        
+        .navbar-date {
+            font-size: 0.75rem;
+        }
+        
+        .navbar-message {
+            font-size: 0.7rem;
+        }
+        
+        .company-name {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<!-- Clean Professional Navbar -->
+<nav class="navbar-custom">
+    <div class="navbar-container">
+        <!-- Left: Logo -->
+        <div class="navbar-left">
+            <a href="/" class="navbar-brand">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" class="navbar-logo" 
+                     onerror="this.style.display='none'; this.parentNode.innerHTML='<div class=\'logo-placeholder\'></div>';">
+                <div class="logo-placeholder" style="display: none; width: 40px; height: 40px; background: linear-gradient(135deg, #4f46e5, #6366f1); border-radius: 8px;"></div>
+            </a>
+        </div>
+        
+        <!-- Center: Time & Date -->
+        <div class="navbar-center">
+            <div class="time-container">
+                <div class="navbar-time" id="navbar-time">00:00:00</div>
+                <div class="navbar-date" id="navbar-date">
+                    <span id="navbar-day">Monday</span>
+                    <span class="date-separator">•</span>
+                    <span id="navbar-date-full">Jan 1, 2024</span>
+                </div>
+            </div>
+            <div class="navbar-message" id="navbar-message">Welcome to Ideas2.0 Limited</div>
+        </div>
+        
+        <!-- Right: Company Name -->
+        <div class="navbar-right">
+            <div class="company-name">
+                Ideas2.0 Limited
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content Area - Clean and Professional -->
+<div class="main-content">
+    <div class="main-container">
+        <div class="card-container">
+            <!-- Title Section -->
+            <div class="title-section">
+                <h1 class="page-title">
+                    Visitor Check-in
+                </h1>
+                <p class="page-subtitle">
+                    A quick and secure way to manage your visit
+                </p>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="buttons-grid">
+                <a href="{{ url_for('checkin') }}" class="action-button btn-checkin">
+                    <i class="bi bi-arrow-right-circle-fill btn-icon"></i>
+                    Check In
+                    <div class="btn-subtext">Register your arrival</div>
+                </a>
+                
+                <a href="{{ url_for('public_checkout') }}" class="action-button btn-checkout">
+                    <i class="bi bi-arrow-left-circle-fill btn-icon"></i>
+                    Check Out
+                    <div class="btn-subtext">Record your departure</div>
+                </a>
+            </div>
+            
+            <!-- Admin Access Footer -->
+            <div class="footer-section">
+                <small style="color: #64748b; font-size: 0.9rem; margin-right: 1rem;">
+                    Staff access
+                </small>
+                <a href="{{ url_for('admin_login') }}" class="admin-portal">
+                    <i class="bi bi-shield-lock"></i>
+                    Admin Portal
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript - Simplified -->
+<script>
+    // Function to update navbar time and message
+    function updateNavbar() {
+        const now = new Date();
+        
+        // Format time
+        const timeString = now.toLocaleTimeString('en-US', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        
+        // Format day and date
+        const dayString = now.toLocaleDateString('en-US', { weekday: 'long' });
+        const dateString = now.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+        });
+        
+        // Update navbar elements
+        document.getElementById('navbar-time').textContent = timeString;
+        document.getElementById('navbar-day').textContent = dayString;
+        document.getElementById('navbar-date-full').textContent = dateString;
+        
+        // Simple greeting based on time of day
+        const hour = now.getHours();
+        let greeting = "Welcome to Ideas2.0 Limited";
+        
+        if (hour < 12) greeting = "Good morning at Ideas2.0 Limited";
+        else if (hour < 18) greeting = "Good afternoon at Ideas2.0 Limited";
+        else greeting = "Good evening at Ideas2.0 Limited";
+        
+        // Update navbar message
+        document.getElementById('navbar-message').textContent = greeting;
+    }
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        updateNavbar();
+        
+        // Update time every second
+        setInterval(updateNavbar, 1000);
+        
+        // Handle logo placeholder
+        const logoImg = document.querySelector('.navbar-logo');
+        const placeholder = document.querySelector('.logo-placeholder');
+        
+        if (logoImg && logoImg.complete && logoImg.naturalHeight === 0) {
+            placeholder.style.display = 'block';
+        }
+        
+        if (logoImg) {
+            logoImg.onerror = function() {
+                this.style.display = 'none';
+                placeholder.style.display = 'block';
+            };
+        }
+    });
+</script>
+
+{% endblock %}

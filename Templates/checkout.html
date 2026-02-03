@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="card shadow-lg border-warning">
+        <div class="card-header bg-warning text-dark text-center py-4">
+            <h2 class="mb-1">I'm Leaving</h2>
+            <p class="lead mb-0">Check-out from your visit</p>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+
+            {# Regular messages (error, etc.) #}
+            {% if message and message_type != 'success' %}
+            <div class="alert alert-{{ message_type|default('info') }} alert-dismissible fade show text-center py-4 mb-4"
+                role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            {# Search form (hide after successful checkout) #}
+            {% if not (message and 'successfully checked out' in message) %}
+            <form method="POST" class="mb-5">
+                <div class="input-group input-group-lg mb-3">
+                    <input type="text" name="search" class="form-control" placeholder="Enter your name or phone number"
+                        value="{{ search_term }}" required autofocus>
+                    <button type="submit" class="btn btn-warning px-5">
+                        Find My Visit
+                    </button>
+                </div>
+            </form>
+            {% endif %}
+
+            {# Visitor list (only show if not just checked out) #}
+            {% if visitors and not (message and 'successfully checked out' in message) %}
+            <h5 class="text-muted mb-3">Your visit{{ 's' if visitors|length > 1 else '' }}:</h5>
+
+            <div class="list-group">
+                {% for v in visitors %}
+                <div class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
+                    <div>
+                        <h5 class="mb-1">{{ v['name'] }}</h5>
+                        <small class="text-muted">
+                            Phone: {{ v['phone'] }} • Arrived: {{ v['time'] }}<br>
+                            Purpose: {{ v['purpose'] }}
+                        </small>
+                    </div>
+                    <form method="POST">
+                        <input type="hidden" name="action" value="checkout">
+                        <input type="hidden" name="visitor_id" value="{{ v['id'] }}">
+                        <button type="submit" class="btn btn-outline-success btn-lg px-4 fw-bold">
+                            Check Out
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% elif request.method == 'POST' and not message %}
+            <div class="alert alert-warning text-center py-4">
+                <h5>No matching active visit found</h5>
+                <p class="mb-0">Please try typing your name or phone again.</p>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <div class="card-footer bg-light text-center py-4">
+            <a href="/" class="btn btn-outline-secondary btn-lg px-5">
+                ← Back to Main Screen
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ======================= -->
+<!-- POP-UP MODAL (only after successful checkout) -->
+<!-- ======================= -->
+{% if message and 'successfully checked out' in message %}
+<div class="modal fade show" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true"
+    style="display: block; background: rgba(0,0,0,0.6);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-success text-white border-0">
+                <h5 class="modal-title fw-bold fs-4" id="successModalLabel">Thank You!</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-5">
+                <div class="display-1 text-success mb-4">✓</div>
+                <h3 class="fw-bold mb-3">Thanks for visiting!</h3>
+                <p class="lead text-muted mb-0">You are welcomed again.</p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-outline-success px-5 py-3" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Silent auto-redirect after success (no visible timer) -->
+{% if message and 'successfully checked out' in message %}
+<script>
+    // Auto-redirect to home after 5 seconds (silent)
+    setTimeout(function () {
+        window.location.href = "/";
+    }, 5000);
+</script>
+{% endif %}
+
+{% endblock %}
